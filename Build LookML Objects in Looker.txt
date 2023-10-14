@@ -1,0 +1,70 @@
+Task 1. Create dimensions and measures
+
+  dimension: is_search_source {
+    type: yesno
+    sql: ${users.traffic_source} = "Search" ;;
+  }
+
+  measure: sales_from_complete_search_users {
+    type: sum
+    sql: ${TABLE}.sale_price ;;
+    filters: [is_search_source: "Yes", order_items.status: "Complete"]
+  }
+
+  measure: total_gross_margin {
+    type: sum
+    sql: ${TABLE}.sale_price - ${inventory_items.cost} ;;
+  }
+
+  dimension: return_days {
+    type: number
+    sql: DATE_DIFF(${order_items.delivered_date}, ${order_items.returned_date}, DAY);;
+  }
+
+
+Task 2. Create a persistent derived table
+
+join: user_details {
+  type: left_outer
+  sql_on: ${order_items.user_id} = ${user_details.user_id} ;;
+ relationship: many_to_one
+}
+
+
+Task 3. Use Explore filters
+
+Filter #1
+sql_always_where: ${sale_price} >= 283;;
+
+Filter #2
+conditionally_filter: {
+ filters: [order_items.shipped_date: "2018"]
+ unless: [order_items.status, order_items.delivered_date]
+}
+
+Filter #3
+sql_always_having: ${average_sale_price} > 283;;
+
+Filter #4
+always_filter: {
+  filters: [
+    order_items.status: "Shipped", 
+    users.state: "California", 
+    users.traffic_source: "Search"
+    ]
+}
+
+
+Task 4. Apply a datagroup to an Explore
+
+datagroup: order_items_challenge_datagroup {
+  sql_trigger: SELECT MAX(order_item_id) from order_items ;;
+  max_cache_age: "72 hours"
+}
+
+persist_with: order_items_challenge_datagroup
+
+
+
+
+
