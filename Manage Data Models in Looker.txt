@@ -1,0 +1,44 @@
+My solution to Manage Data Models in Looker Challenge Lab
+
+Task 1. Create LookML objects
+
+dimension: profit {
+  label: "Profit"
+  description: "Profit from product sales"
+  type: number
+  sql: ${sale_price} - ${products.cost} ;;
+  value_format_name: usd
+}
+
+measure: total_profit {
+  label: "Total profit"
+  description: "total profit from product sales"
+  type: sum
+  sql: ${profit} ;;
+  value_format_name: usd
+}
+
+datagroup: DATAGROUP_NAME {
+  max_cache_age: "168 hours"
+}
+
+persist_with: DATAGROUP_NAME
+
+
+Task 2. Create and fix a refinement with an aggregate table
+
+explore: +order_items {
+  label: "Order Items - Aggregate Profit and Revenue"
+  aggregate_table: weekly_aggregate_revenue_profit {
+    query: {
+      dimensions: [order_items.created_date]
+      measures: [order_items.total_revenue, order_items.total_profit]
+    }
+    materialization: {
+      datagroup_trigger: DATAGROUP_NAME
+      increment_key: "created_date"
+    }
+  }
+}
+
+
