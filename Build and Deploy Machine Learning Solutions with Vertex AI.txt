@@ -1,0 +1,47 @@
+My solutions to Build and Deploy Machine Learning Solutions with Vertex AI Challenge Lab
+
+Task 2. Download the challenge notebook
+
+PROJECT_ID = "qwiklabs-gcp-04-f11944ba88fc"
+GCS_BUCKET = f"gs://{PROJECT_ID}-bucket"
+
+
+Task 3. Build and train your model locally in a Vertex notebook
+
+Build and compile a TensorFlow BERT sentiment classifier
+preprocessor = hub.KerasLayer(hparams['tfhub-bert-preprocessor'], name='preprocessing')
+encoder = hub.KerasLayer(hparams['tfhub-bert-encoder'], name='BERT_encoder')
+"model-dir": './bert-sentiment-classifier-local'
+
+
+Task 4. Use Cloud Build to build and submit your model container to Google Cloud Artifact Registry
+
+Create Artifact Registry for custom container images
+!gcloud artifacts repositories create {ARTIFACT_REGISTRY} \
+--location={REGION} \
+--repository-format=docker \
+--description="Sentiment classifier container image artifact registry"
+
+Build and submit your container image to Artifact Registry using Cloud Build
+!gcloud builds submit {MODEL_DIR} --config={MODEL_DIR}/cloudbuild.yaml
+
+
+Task 5. Define a pipeline using the KFP SDK
+
+display_name=display_name,    
+container_uri=container_uri,
+model_serving_container_image_uri=model_serving_container_image_uri,    
+base_output_dir=base_output_dir,
+
+
+Task 6. Query deployed model on Vertex Endpoint for online predictions
+
+endpoint = vertexai.Endpoint(
+endpoint_name=ENDPOINT_NAME,
+project=PROJECT_ID,
+location=REGION
+)
+
+test_review = "The Dark Knight is the best Batman movie!"
+
+prediction = endpoint.predict([test_review])
