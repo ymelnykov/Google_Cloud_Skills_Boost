@@ -1,0 +1,12 @@
+My solutions to Google Cloud Essential Skills Challenge Lab
+
+Task 1. Create a Linux VM instance
+gcloud compute instances create tst-eng-8fm --zone us-west1-c --tags http-server
+
+Task 2. Enable public access to VM instance
+gcloud compute firewall-rules create allow-http --target-tags http-server --source-ranges 0.0.0.0/0 --allow tcp:80
+
+Task 3. Running a basic Apache Web Server
+Open ssh of VM instance:
+sudo apt-get update 
+sudo apt-get install apache2 -y
