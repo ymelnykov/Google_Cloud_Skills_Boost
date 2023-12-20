@@ -1,0 +1,26 @@
+My solutions to App Engine: 3 Ways Challenge Lab
+
+
+Task 1. Enable the Google App Engine Admin API
+
+gcloud services enable appengine.googleapis.com
+
+
+Task 2. Download the Hello World app
+
+Open VM Instances -> lab-setup SSH
+git clone https://github.com/GoogleCloudPlatform/php-docs-samples.git
+cd php-docs-samples/appengine/standard/helloworld
+
+
+Task 3. Deploy your application
+
+gcloud app deploy
+gcloud app browse
+
+
+Task 4. Deploy updates to your application
+
+nano index.php
+change "hello world!" to "Goodbye world!" -> Ctrl+x, Y, Enter
+gcloud app deploy
