@@ -1,0 +1,25 @@
+My solutions to Get Started with Dataplex Challenge Lab
+
+
+Task 1. Create a lake with a raw zone
+
+gcloud services enable dataplex.googleapis.com
+gcloud services enable datacatalog.googleapis.com
+export REGION=us-central1
+gcloud config set compute/region $REGION
+
+gcloud dataplex lakes create customer-engagements \
+    --location=$REGION \
+    --display-name="Customer Engagements"
+	
+gcloud dataplex zones create raw-event-data \
+    --location=$REGION \
+    --lake=customer-engagements \
+    --display-name="Raw Event Data" \
+    --type=RAW \
+    --resource-location-type=SINGLE_REGION \
+    --discovery-enabled
+	
+Task 2. Create and attach a Cloud Storage bucket to the zone
+
+gsutil mb -l $REGION gs://qwiklabs-gcp-04-02e1701caf61
