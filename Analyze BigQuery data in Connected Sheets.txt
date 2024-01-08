@@ -1,0 +1,11 @@
+My solutions to Analyze BigQuery data in Connected Sheets Challenge Lab
+
+Task 2. Use a formula to count rows that meet a specific criteria
+
+=COUNTIF(tlc_yellow_trips_2022!airport_fee, ">0")
+
+
+Task 5. Calculate new columns to transform existing column data
+
+=IF(fare_amount>0, tolls_amount/fare_amount*100, 0)
+
